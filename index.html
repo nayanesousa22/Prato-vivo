@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa Nutrição — Planos Alimentares Personalizados</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<!-- GSAP & ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── LOGO & TITLES FONT ───────────────────────── */
+@font-face {
+  font-family: 'Tangier';
+  src: url('tangier/Tangier.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-forest: #1A2E22;
+  --color-bone: #F3F1EB;
+  --color-green-200: #BBF7D0;
+  --color-green-300: #86EFAC;
+  --color-green-400: #4ADE80;
+  --font-display: 'Tangier', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bone);
+  color: var(--color-forest);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .serif-font, .font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ─── TEXT GRADIENT HIGHLIGHT ──────────────────── */
+.text-highlight {
+  background: linear-gradient(135deg, #A7F3D0 0%, #4ADE80 50%, #22C55E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* ─── BUTTON FLASH / SHINE EFFECT ──────────────── */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -120%;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.03) 75%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  animation: buttonShine 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.btn-shine:hover::after {
+  animation: buttonShineFast 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes buttonShine {
+  0% { left: -130%; }
+  25% { left: 140%; }
+  100% { left: 140%; }
+}
+@keyframes buttonShineFast {
+  0% { left: -130%; }
+  100% { left: 140%; }
+}
+
+/* ─── MARQUEE / TICKER CONTINUO ────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 28s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── CARROSSEL DE DEPOIMENTOS (LOOP INFINITO) ─── */
+.testimonial-track {
+  display: flex;
+  width: max-content;
+  animation: testimonialScroll 38s linear infinite;
+}
+.testimonial-track:hover {
+  animation-play-state: paused;
+}
+@keyframes testimonialScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── TYPEWRITER STYLES (DOBRA 5) ──────────────── */
+.typewriter-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.15em;
+  background-color: #4ADE80;
+  vertical-align: -0.15em;
+  margin-left: 3px;
+  box-shadow: 0 0 8px #4ADE80;
+  animation: cursorBlink 0.75s ease-in-out infinite;
+}
+.typewriter-cursor.hidden-cursor {
+  display: none !important;
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.step-photo {
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  filter: blur(2px);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.step-photo.is-active {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+  filter: blur(0) !important;
+}
+
+/* ─── SCROLL REVEAL BIDIRECIONAL (SUAVE & VISÍVEL) ─── */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal-item.is-revealed {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+</style></head>
+<body class="antialiased selection:bg-[#1A2E22] selection:text-[#F3F1EB]">
+
+    <!-- Navigation -->
+    <nav class="absolute top-0 w-full z-50 bg-[#1A2E22]/90 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                <!-- Canto Esquerdo: Logo CASA NUTRIÇÃO -->
+                <div class="flex items-center">
+                    <span class="font-display text-2xl sm:text-3xl lg:text-4xl text-[#F3F1EB] tracking-wide">Casa Nutrição</span>
+                </div>
+
+                <!-- Canto Direito: Tag Nutrição Comportamental & Clínica em linha única -->
+                <div class="flex items-center">
+                    <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#86EFAC] text-[9px] sm:text-[11px] md:text-xs font-semibold tracking-wider uppercase whitespace-nowrap">
+                        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#4ADE80] animate-pulse shrink-0"></span>
+                        <span class="whitespace-nowrap">NUTRIÇÃO COMPORTAMENTAL &amp; CLÍNICA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section (Primeira Dobra - Altura mais compacta e proporcional) -->
+    <header class="relative min-h-[66vh] md:min-h-[72vh] flex items-center justify-start overflow-hidden pt-20 sm:pt-24 pb-12">
+        <!-- Background Image com enquadramento focado no prato de comida e posição elevada -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <img src="hero-bg.jpg" alt="Alimentação saudável e consciente" class="w-full h-full object-cover object-[82%_70%] md:object-[75%_35%] filter brightness-[0.95] contrast-[1.05]">
+            <!-- Degradê elegante que protege a legibilidade do texto no mobile mantendo o prato de comida visível -->
+            <div class="absolute inset-0 bg-gradient-to-b from-[#1A2E22]/90 via-[#1A2E22]/60 to-[#1A2E22]/85 md:bg-gradient-to-r md:from-[#1A2E22] md:via-[#1A2E22]/75 md:to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#1A2E22]/80 via-transparent to-[#1A2E22]/40"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-8 w-full py-6 md:py-10">
+            <div class="max-w-xl md:max-w-3xl mx-auto md:mx-0 flex flex-col items-center md:items-start text-center md:text-left">
+                <!-- Headline quebrada e centralizada no mobile com tamanho aumentado e respiro lateral -->
+                <h1 class="text-[1.75rem] sm:text-[2.6rem] lg:text-[3.85rem] font-display text-white leading-[1.18] sm:leading-[1.14] tracking-tight mb-6 sm:mb-8 text-center md:text-left max-w-lg sm:max-w-none">
+                    <span>Um plano de alimentação</span><br>
+                    <span>que cabe na sua rotina,</span><br>
+                    <span class="text-highlight">e acompanha você quando</span><br>
+                    <span class="text-highlight">ela muda.</span>
+                </h1>
+
+                <!-- Subheadline / Bloco com respiro e centralização no mobile -->
+                <div class="border-y sm:border-y-0 sm:border-l-2 border-[#86EFAC]/60 px-5 sm:pl-6 sm:pr-8 py-3.5 sm:py-3 mb-8 sm:mb-10 max-w-lg sm:max-w-2xl lg:max-w-[45rem] bg-black/25 backdrop-blur-sm rounded-xl sm:rounded-r-xl sm:rounded-l-none text-center md:text-left">
+                    <p class="text-sm sm:text-base md:text-lg text-[#F3F1EB]/90 leading-relaxed font-light">
+                        Consulta presencial ou online com nutricionista que escuta antes<br class="hidden sm:inline">
+                        de prescrever. Sem julgamento, sem lista de proibições.
+                    </p>
+                </div>
+
+                <!-- Ação CTA centralizada no mobile com respiro lateral -->
+                <div class="mb-10 sm:mb-12 w-full sm:w-auto flex justify-center md:justify-start">
+                    <a href="#agendar" class="btn-shine w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-[#1A2E22] hover:bg-[#15251b] text-white border border-[#86EFAC]/40 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all duration-300 shadow-2xl hover:scale-105 group text-center">
+                        <span>AGENDAR MINHA PRIMEIRA CONSULTA</span>
+                        <iconify-icon icon="solar:calendar-date-bold-duotone" class="text-lg text-[#86EFAC] group-hover:translate-x-0.5 transition-transform"></iconify-icon>
+                    </a>
+                </div>
+
+                <!-- Trust Badges centralizados no mobile -->
+                <div class="flex flex-wrap items-center justify-center md:justify-start gap-y-3 gap-x-5 sm:gap-x-6 pt-5 border-t border-white/15 text-xs text-[#F3F1EB]/75 font-medium w-full">
+                    <div class="flex items-center gap-2">
+                        <iconify-icon icon="solar:check-circle-bold" class="text-[#86EFAC] text-base"></iconify-icon>
+                        <span>Atendimento Humanizado</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <iconify-icon icon="solar:shield-check-bold" class="text-[#86EFAC] text-base"></iconify-icon>
+                        <span>Presencial &amp; Online</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <iconify-icon icon="solar:heart-bold" class="text-[#86EFAC] text-base"></iconify-icon>
+                        <span>Sem Restrições Radicais</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════
+         DOBRA 2 — ESCUTA & ACOLHIMENTO
+    ══════════════════════════════════════ -->
+    <section class="bg-[#FFFFFF] text-[#1A2E22] py-20 sm:py-28 md:py-36 px-6 sm:px-8 lg:px-8 border-t border-[#1A2E22]/5">
+        <div class="max-w-[340px] sm:max-w-xl md:max-w-3xl mx-auto text-center">
+            
+            <!-- Tag de Apoio / Eyebrow -->
+            <div class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#F3F1EB] border border-[#1A2E22]/10 text-[#1A2E22]/70 text-[11px] sm:text-xs font-semibold tracking-wider uppercase mb-6 sm:mb-8">
+                <span class="w-2 h-2 rounded-full bg-[#16A34A]"></span>
+                Sem Julgamento · Nutrição Real
+            </div>
+
+            <!-- Título da Dobra 2 (Tangier) -->
+            <h2 class="font-display text-2xl sm:text-3xl lg:text-[2.85rem] leading-[1.25] text-[#1A2E22] tracking-tight mb-7 sm:mb-10 max-w-lg sm:max-w-none mx-auto">
+                Se você já recomeçou a dieta mais vezes<br class="hidden md:inline"> do que consegue contar
+            </h2>
+
+            <!-- Divisor elegante -->
+            <div class="w-12 h-[2px] bg-[#16A34A]/30 mx-auto mb-7 sm:mb-10 rounded-full"></div>
+
+            <!-- Bloco de Texto Centralizado (Inter) -->
+            <div class="space-y-4 sm:space-y-6 text-[14px] sm:text-[16px] md:text-lg text-[#1A2E22]/80 leading-[1.55] sm:leading-relaxed font-normal max-w-xs sm:max-w-xl md:max-w-2xl mx-auto">
+                <p>
+                    Você começa animada. Segue o plano por alguns dias, a semana aperta, o trabalho aperta, não dá tempo de cozinhar. Aí vem a culpa e a decisão de <span class="font-medium text-[#1A2E22]">“recomeçar na segunda”</span>.
+                </p>
+
+                <p>
+                    Quando isso se repete, muita gente conclui que falta força de vontade.<br class="hidden sm:inline">
+                    <span class="font-semibold text-[#1A2E22]">Não falta.</span> Na maioria das vezes, o plano é que foi feito para uma rotina<br class="hidden sm:inline">
+                    que não é a sua.
+                </p>
+
+                <p class="pt-1 sm:pt-2 text-[#1A2E22] font-medium text-[15px] sm:text-lg md:text-xl leading-[1.5]">
+                    E tem a vergonha de falar disso. Medo de ser julgada, de ouvir que<br class="hidden sm:inline">
+                    “é só ter disciplina”. <span class="text-[#15803D] font-semibold underline decoration-[#86EFAC] decoration-2 underline-offset-4">Aqui, a primeira coisa que fazemos é escutar.</span>
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         FAIXA SOCIAL PROOF (MARQUEE TICKER)
+    ══════════════════════════════════════ -->
+    <div class="relative w-full overflow-hidden bg-gradient-to-r from-[#1A2E22] via-[#1f3a2b] to-[#1A2E22] py-4 sm:py-5 border-y border-[#86EFAC]/25 shadow-lg select-none">
+        <!-- Glow / Reflexo de luz suave no topo da faixa -->
+        <div class="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#86EFAC]/40 to-transparent"></div>
+        <div class="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-[#86EFAC]/20 to-transparent"></div>
+        
+        <!-- Marquee Track em looping infinito para a esquerda -->
+        <div class="marquee-track flex items-center">
+            
+            <!-- Grupo 1 -->
+            <div class="flex items-center gap-8 sm:gap-14 px-4 sm:px-7 shrink-0 text-sm sm:text-base font-medium">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2 h-2 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
+                    <span class="text-[#F3F1EB] font-light">5 anos de clínica, com <strong class="font-semibold text-highlight">4 nutricionistas.</strong></span>
+                </div>
+                <span class="text-[#86EFAC]/40 font-serif text-lg">✦</span>
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2 h-2 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
+                    <span class="text-[#F3F1EB] font-light">Cerca de <strong class="font-semibold text-highlight">900 pacientes</strong> atendidos.</span>
+                </div>
+                <span class="text-[#86EFAC]/40 font-serif text-lg">✦</span>
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2 h-2 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
+                    <span class="text-[#F3F1EB] font-light">Nota <strong class="font-semibold text-highlight">4,9</strong> no Google.</span>
+                    <div class="flex text-[#FCD34D] text-xs ml-1">
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                    </div>
+                </div>
+                <span class="text-[#86EFAC]/40 font-serif text-lg">✦</span>
+            </div>
+
+            <!-- Grupo 2 (Duplicado para looping contínuo sem emendas) -->
+            <div class="flex items-center gap-8 sm:gap-14 px-4 sm:px-7 shrink-0 text-sm sm:text-base font-medium" aria-hidden="true">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2 h-2 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
+                    <span class="text-[#F3F1EB] font-light">5 anos de clínica, com <strong class="font-semibold text-highlight">4 nutricionistas.</strong></span>
+                </div>
+                <span class="text-[#86EFAC]/40 font-serif text-lg">✦</span>
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2 h-2 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
+                    <span class="text-[#F3F1EB] font-light">Cerca de <strong class="font-semibold text-highlight">900 pacientes</strong> atendidos.</span>
+                </div>
+                <span class="text-[#86EFAC]/40 font-serif text-lg">✦</span>
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2 h-2 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
+                    <span class="text-[#F3F1EB] font-light">Nota <strong class="font-semibold text-highlight">4,9</strong> no Google.</span>
+                    <div class="flex text-[#FCD34D] text-xs ml-1">
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                    </div>
+                </div>
+                <span class="text-[#86EFAC]/40 font-serif text-lg">✦</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         DOBRA 3 — O MÉTODO CASA NUTRIÇÃO
+    ══════════════════════════════════════ -->
+    <section class="bg-[#FFFFFF] text-[#1A2E22] py-20 md:py-28 px-6 sm:px-8 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            
+            <!-- Cabeçalho da Dobra 3 -->
+            <div class="text-center max-w-3xl mx-auto mb-14 md:mb-20 px-2 sm:px-0">
+                <div class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#F3F1EB] border border-[#1A2E22]/10 text-[#1A2E22]/70 text-[11px] sm:text-xs font-semibold tracking-wider uppercase mb-5">
+                    <span class="w-2 h-2 rounded-full bg-[#16A34A]"></span>
+                    Passo a Passo
+                </div>
+                <h2 class="font-display text-2xl sm:text-4xl lg:text-[2.75rem] leading-[1.25] text-[#1A2E22] tracking-tight mb-4">
+                    O Método Casa Nutrição:<br class="hidden sm:inline">
+                    <span class="text-highlight-dark">um plano feito para a sua vida real</span>
+                </h2>
+                <p class="text-xs sm:text-base text-[#1A2E22]/65 max-w-xs sm:max-w-xl mx-auto leading-relaxed">
+                    Construído em 3 etapas integradas para transformar sua relação com a comida de forma sustentável.
+                </p>
+            </div>
+
+            <!-- Grade dos 3 Cards com Setas de Conexão - Ajustada com respiro elegante nas laterais do mobile -->
+            <div class="relative flex flex-col md:flex-row items-stretch justify-center gap-6 lg:gap-8 max-w-[320px] sm:max-w-md md:max-w-5xl mx-auto w-full">
+                
+                <!-- CARD 1: Escutar -->
+                <div class="flex-1 w-full bg-white border border-[#1A2E22]/10 rounded-2xl overflow-hidden shadow-[0_4px_20px_-4px_rgba(26,46,34,0.08)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] transition-all duration-300 hover:scale-[1.03] group flex flex-col">
+                    <!-- Imagem Superior (Estilo Referência) -->
+                    <div class="relative h-44 sm:h-48 overflow-hidden bg-[#F3F1EB]">
+                        <img src="https://images.unsplash.com/photo-1543362906-acfc16c67564?q=80&w=600&auto=format&fit=crop" alt="Consulta e escuta atenta" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                        <span class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-semibold text-[#1A2E22] shadow-sm">
+                            Etapa 01
+                        </span>
+                    </div>
+                    <!-- Conteúdo Inferior -->
+                    <div class="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="font-display text-2xl text-[#16A34A]">1.</span>
+                                <h3 class="font-display text-2xl text-[#1A2E22]">Escutar.</h3>
+                            </div>
+                            <p class="text-xs sm:text-sm text-[#1A2E22]/75 leading-relaxed mt-3">
+                                Antes de montar qualquer plano, entendemos a sua rotina, o que você gosta de comer e o que já não deu certo.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-[#1A2E22]/50">
+                            <span>Primeira consulta</span>
+                            <iconify-icon icon="solar:chat-line-linear" class="text-base text-[#16A34A]"></iconify-icon>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seta 1 -> 2 (Desktop: horizontal / Mobile: vertical) -->
+                <div class="hidden md:flex items-center justify-center -mx-2 z-10 text-[#16A34A]/40">
+                    <div class="w-8 h-8 rounded-full bg-[#F3F1EB] border border-[#1A2E22]/10 flex items-center justify-center text-[#1A2E22] shadow-sm">
+                        <iconify-icon icon="solar:arrow-right-linear" class="text-base"></iconify-icon>
+                    </div>
+                </div>
+                <div class="flex md:hidden items-center justify-center py-1 text-[#16A34A]/40">
+                    <iconify-icon icon="solar:arrow-down-linear" class="text-xl"></iconify-icon>
+                </div>
+
+                <!-- CARD 2: Ajustar -->
+                <div class="flex-1 w-full bg-white border border-[#1A2E22]/10 rounded-2xl overflow-hidden shadow-[0_4px_20px_-4px_rgba(26,46,34,0.08)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] transition-all duration-300 hover:scale-[1.03] group flex flex-col">
+                    <!-- Imagem Superior (Estilo Referência) -->
+                    <div class="relative h-44 sm:h-48 overflow-hidden bg-[#F3F1EB]">
+                        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=600&auto=format&fit=crop" alt="Prato balanceado e lista flexível" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                        <span class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-semibold text-[#1A2E22] shadow-sm">
+                            Etapa 02
+                        </span>
+                    </div>
+                    <!-- Conteúdo Inferior -->
+                    <div class="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="font-display text-2xl text-[#16A34A]">2.</span>
+                                <h3 class="font-display text-2xl text-[#1A2E22]">Ajustar.</h3>
+                            </div>
+                            <p class="text-xs sm:text-sm text-[#1A2E22]/75 leading-relaxed mt-3">
+                                Você recebe um plano flexível, com lista de compras e opções de refeição rápida para os dias corridos. E o retorno é a cada 15 dias, com ajuste pelo WhatsApp entre as consultas, porque a vida muda e o plano muda junto.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-[#1A2E22]/50">
+                            <span>Retorno a cada 15 dias</span>
+                            <iconify-icon icon="solar:refresh-circle-linear" class="text-base text-[#16A34A]"></iconify-icon>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seta 2 -> 3 (Desktop: horizontal / Mobile: vertical) -->
+                <div class="hidden md:flex items-center justify-center -mx-2 z-10 text-[#16A34A]/40">
+                    <div class="w-8 h-8 rounded-full bg-[#F3F1EB] border border-[#1A2E22]/10 flex items-center justify-center text-[#1A2E22] shadow-sm">
+                        <iconify-icon icon="solar:arrow-right-linear" class="text-base"></iconify-icon>
+                    </div>
+                </div>
+                <div class="flex md:hidden items-center justify-center py-1 text-[#16A34A]/40">
+                    <iconify-icon icon="solar:arrow-down-linear" class="text-xl"></iconify-icon>
+                </div>
+
+                <!-- CARD 3: Sustentar -->
+                <div class="flex-1 w-full bg-white border border-[#1A2E22]/10 rounded-2xl overflow-hidden shadow-[0_4px_20px_-4px_rgba(26,46,34,0.08)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] transition-all duration-300 hover:scale-[1.03] group flex flex-col">
+                    <!-- Imagem Superior (Estilo Referência) -->
+                    <div class="relative h-44 sm:h-48 overflow-hidden bg-[#F3F1EB]">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop" alt="Bem-estar e consistência" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                        <span class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-semibold text-[#1A2E22] shadow-sm">
+                            Etapa 03
+                        </span>
+                    </div>
+                    <!-- Conteúdo Inferior -->
+                    <div class="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="font-display text-2xl text-[#16A34A]">3.</span>
+                                <h3 class="font-display text-2xl text-[#1A2E22]">Sustentar.</h3>
+                            </div>
+                            <p class="text-xs sm:text-sm text-[#1A2E22]/75 leading-relaxed mt-3">
+                                Trabalhamos também o seu comportamento alimentar, não só o cardápio, para que o que você aprende continue valendo depois do acompanhamento.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-[#1A2E22]/50">
+                            <span>Autonomia para a vida</span>
+                            <iconify-icon icon="solar:heart-angle-linear" class="text-base text-[#16A34A]"></iconify-icon>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         DOBRA 4 — DEPOIMENTOS (CARROSSEL INFINITO)
+    ══════════════════════════════════════ -->
+    <section class="bg-[#F3F1EB] text-[#1A2E22] py-20 md:py-28 border-t border-[#1A2E22]/10 overflow-hidden relative">
+        <div class="max-w-6xl mx-auto px-6 sm:px-8 lg:px-8 mb-12 md:mb-16">
+            
+            <!-- Cabeçalho da Dobra 4 - Com respiro lateral e tipografia equilibrada no mobile -->
+            <div class="text-center max-w-[330px] sm:max-w-xl md:max-w-3xl mx-auto px-1 sm:px-0">
+                <div class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-white border border-[#1A2E22]/10 text-[#1A2E22]/70 text-[11px] sm:text-xs font-semibold tracking-wider uppercase mb-4 sm:mb-5 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#16A34A]"></span>
+                    Histórias Reais
+                </div>
+                
+                <h2 class="font-display text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.22] text-[#1A2E22] tracking-tight mb-3.5 sm:mb-4 max-w-xs sm:max-w-none mx-auto">
+                    O que nossos pacientes dizem<br class="hidden sm:inline">
+                    <span class="text-highlight-dark">sobre o acompanhamento.</span>
+                </h2>
+                
+                <p class="text-[13.5px] sm:text-base text-[#1A2E22]/65 max-w-xs sm:max-w-xl mx-auto leading-relaxed">
+                    Pessoas reais que encontraram uma alimentação que funciona na rotina, sem culpa, sem proibições e com escuta de verdade.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Carrossel Marquee Track com Fade Lateral Suave -->
+        <div class="relative w-full overflow-hidden">
+            <!-- Sombras gradientes de fade nas laterais para transição fluida -->
+            <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-28 md:w-40 bg-gradient-to-r from-[#F3F1EB] to-transparent z-10"></div>
+            <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-28 md:w-40 bg-gradient-to-l from-[#F3F1EB] to-transparent z-10"></div>
+
+            <div class="testimonial-track flex items-stretch gap-6 px-4 py-4 cursor-default">
+                
+                <!-- ══════ GRUPO 1 ══════ -->
+                <div class="flex items-stretch gap-6 shrink-0">
+                    
+                    <!-- Card 1: Camila R. -->
+                    <div class="w-[300px] sm:w-[380px] md:w-[420px] bg-white rounded-2xl p-7 border border-[#1A2E22]/10 shadow-[0_4px_20px_-4px_rgba(26,46,34,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex text-[#F59E0B] text-sm gap-1">
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                </div>
+                                <iconify-icon icon="solar:quote-down-circle-linear" class="text-2xl text-[#16A34A]/25"></iconify-icon>
+                            </div>
+                            <p class="text-sm sm:text-[15px] text-[#1A2E22]/85 leading-relaxed font-normal">
+                                “Eu adiei procurar nutricionista por anos, com medo de ouvir um sermão. Na primeira consulta ninguém me julgou. Pela primeira vez eu consegui falar do que eu realmente como e do que dá errado na minha rotina.”
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-5 border-t border-[#1A2E22]/8 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-full bg-[#1A2E22] text-[#F3F1EB] font-semibold text-xs flex items-center justify-center tracking-wider shadow-sm shrink-0">
+                                CR
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-[#1A2E22]">Camila R., 34 anos</h4>
+                                <p class="text-[11px] text-[#16A34A] font-medium flex items-center gap-1">
+                                    <iconify-icon icon="solar:check-circle-bold" class="text-xs"></iconify-icon>
+                                    Paciente Casa Nutrição
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Juliana F. -->
+                    <div class="w-[300px] sm:w-[380px] md:w-[420px] bg-white rounded-2xl p-7 border border-[#1A2E22]/10 shadow-[0_4px_20px_-4px_rgba(26,46,34,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex text-[#F59E0B] text-sm gap-1">
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                </div>
+                                <iconify-icon icon="solar:quote-down-circle-linear" class="text-2xl text-[#16A34A]/25"></iconify-icon>
+                            </div>
+                            <p class="text-sm sm:text-[15px] text-[#1A2E22]/85 leading-relaxed font-normal">
+                                “Eu já tinha abandonado tantas dietas que achava que o problema era eu. Aqui o plano foi montado em cima da minha rotina, e quando a semana apertava eu ajustava com a nutricionista pelo WhatsApp, sem culpa.”
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-5 border-t border-[#1A2E22]/8 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-full bg-[#1A2E22] text-[#F3F1EB] font-semibold text-xs flex items-center justify-center tracking-wider shadow-sm shrink-0">
+                                JF
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-[#1A2E22]">Juliana F., 41 anos</h4>
+                                <p class="text-[11px] text-[#16A34A] font-medium flex items-center gap-1">
+                                    <iconify-icon icon="solar:check-circle-bold" class="text-xs"></iconify-icon>
+                                    Paciente Casa Nutrição
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Patrícia L. -->
+                    <div class="w-[300px] sm:w-[380px] md:w-[420px] bg-white rounded-2xl p-7 border border-[#1A2E22]/10 shadow-[0_4px_20px_-4px_rgba(26,46,34,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex text-[#F59E0B] text-sm gap-1">
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                </div>
+                                <iconify-icon icon="solar:quote-down-circle-linear" class="text-2xl text-[#16A34A]/25"></iconify-icon>
+                            </div>
+                            <p class="text-sm sm:text-[15px] text-[#1A2E22]/85 leading-relaxed font-normal">
+                                “Trabalho o dia inteiro e chego em casa sem vontade de cozinhar. A lista de compras e as opções de refeição rápida fizeram o plano caber na minha semana, em vez de eu ter que caber nele.”
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-5 border-t border-[#1A2E22]/8 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-full bg-[#1A2E22] text-[#F3F1EB] font-semibold text-xs flex items-center justify-center tracking-wider shadow-sm shrink-0">
+                                PL
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-[#1A2E22]">Patrícia L., 46 anos</h4>
+                                <p class="text-[11px] text-[#16A34A] font-medium flex items-center gap-1">
+                                    <iconify-icon icon="solar:check-circle-bold" class="text-xs"></iconify-icon>
+                                    Paciente Casa Nutrição
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Rafael M. -->
+                    <div class="w-[300px] sm:w-[380px] md:w-[420px] bg-white rounded-2xl p-7 border border-[#1A2E22]/10 shadow-[0_4px_20px_-4px_rgba(26,46,34,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex text-[#F59E0B] text-sm gap-1">
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                </div>
+                                <iconify-icon icon="solar:quote-down-circle-linear" class="text-2xl text-[#16A34A]/25"></iconify-icon>
+                            </div>
+                            <p class="text-sm sm:text-[15px] text-[#1A2E22]/85 leading-relaxed font-normal">
+                                “Eu treino há anos, mas minha alimentação era no improviso. O que mais me ajudou foi o retorno a cada 15 dias. Se a rotina mudava, o plano mudava junto, e eu não ficava perdido.”
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-5 border-t border-[#1A2E22]/8 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-full bg-[#1A2E22] text-[#F3F1EB] font-semibold text-xs flex items-center justify-center tracking-wider shadow-sm shrink-0">
+                                RM
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-[#1A2E22]">Rafael M., 37 anos</h4>
+                                <p class="text-[11px] text-[#16A34A] font-medium flex items-center gap-1">
+                                    <iconify-icon icon="solar:check-circle-bold" class="text-xs"></iconify-icon>
+                                    Paciente Casa Nutrição
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ══════ GRUPO 2 (Duplicado para loop contínuo sem cortes) ══════ -->
+                <div class="flex items-stretch gap-6 shrink-0" aria-hidden="true">
+                    
+                    <!-- Card 1: Camila R. -->
+                    <div class="w-[300px] sm:w-[380px] md:w-[420px] bg-white rounded-2xl p-7 border border-[#1A2E22]/10 shadow-[0_4px_20px_-4px_rgba(26,46,34,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex text-[#F59E0B] text-sm gap-1">
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                </div>
+                                <iconify-icon icon="solar:quote-down-circle-linear" class="text-2xl text-[#16A34A]/25"></iconify-icon>
+                            </div>
+                            <p class="text-sm sm:text-[15px] text-[#1A2E22]/85 leading-relaxed font-normal">
+                                “Eu adiei procurar nutricionista por anos, com medo de ouvir um sermão. Na primeira consulta ninguém me julgou. Pela primeira vez eu consegui falar do que eu realmente como e do que dá errado na minha rotina.”
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-5 border-t border-[#1A2E22]/8 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-full bg-[#1A2E22] text-[#F3F1EB] font-semibold text-xs flex items-center justify-center tracking-wider shadow-sm shrink-0">
+                                CR
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-[#1A2E22]">Camila R., 34 anos</h4>
+                                <p class="text-[11px] text-[#16A34A] font-medium flex items-center gap-1">
+                                    <iconify-icon icon="solar:check-circle-bold" class="text-xs"></iconify-icon>
+                                    Paciente Casa Nutrição
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Juliana F. -->
+                    <div class="w-[300px] sm:w-[380px] md:w-[420px] bg-white rounded-2xl p-7 border border-[#1A2E22]/10 shadow-[0_4px_20px_-4px_rgba(26,46,34,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex text-[#F59E0B] text-sm gap-1">
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                </div>
+                                <iconify-icon icon="solar:quote-down-circle-linear" class="text-2xl text-[#16A34A]/25"></iconify-icon>
+                            </div>
+                            <p class="text-sm sm:text-[15px] text-[#1A2E22]/85 leading-relaxed font-normal">
+                                “Eu já tinha abandonado tantas dietas que achava que o problema era eu. Aqui o plano foi montado em cima da minha rotina, e quando a semana apertava eu ajustava com a nutricionista pelo WhatsApp, sem culpa.”
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-5 border-t border-[#1A2E22]/8 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-full bg-[#1A2E22] text-[#F3F1EB] font-semibold text-xs flex items-center justify-center tracking-wider shadow-sm shrink-0">
+                                JF
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-[#1A2E22]">Juliana F., 41 anos</h4>
+                                <p class="text-[11px] text-[#16A34A] font-medium flex items-center gap-1">
+                                    <iconify-icon icon="solar:check-circle-bold" class="text-xs"></iconify-icon>
+                                    Paciente Casa Nutrição
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Patrícia L. -->
+                    <div class="w-[300px] sm:w-[380px] md:w-[420px] bg-white rounded-2xl p-7 border border-[#1A2E22]/10 shadow-[0_4px_20px_-4px_rgba(26,46,34,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex text-[#F59E0B] text-sm gap-1">
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                </div>
+                                <iconify-icon icon="solar:quote-down-circle-linear" class="text-2xl text-[#16A34A]/25"></iconify-icon>
+                            </div>
+                            <p class="text-sm sm:text-[15px] text-[#1A2E22]/85 leading-relaxed font-normal">
+                                “Trabalho o dia inteiro e chego em casa sem vontade de cozinhar. A lista de compras e as opções de refeição rápida fizeram o plano caber na minha semana, em vez de eu ter que caber nele.”
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-5 border-t border-[#1A2E22]/8 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-full bg-[#1A2E22] text-[#F3F1EB] font-semibold text-xs flex items-center justify-center tracking-wider shadow-sm shrink-0">
+                                PL
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-[#1A2E22]">Patrícia L., 46 anos</h4>
+                                <p class="text-[11px] text-[#16A34A] font-medium flex items-center gap-1">
+                                    <iconify-icon icon="solar:check-circle-bold" class="text-xs"></iconify-icon>
+                                    Paciente Casa Nutrição
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Rafael M. -->
+                    <div class="w-[300px] sm:w-[380px] md:w-[420px] bg-white rounded-2xl p-7 border border-[#1A2E22]/10 shadow-[0_4px_20px_-4px_rgba(26,46,34,0.06)] hover:shadow-[0_12px_28px_-6px_rgba(26,46,34,0.14)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex text-[#F59E0B] text-sm gap-1">
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                                </div>
+                                <iconify-icon icon="solar:quote-down-circle-linear" class="text-2xl text-[#16A34A]/25"></iconify-icon>
+                            </div>
+                            <p class="text-sm sm:text-[15px] text-[#1A2E22]/85 leading-relaxed font-normal">
+                                “Eu treino há anos, mas minha alimentação era no improviso. O que mais me ajudou foi o retorno a cada 15 dias. Se a rotina mudava, o plano mudava junto, e eu não ficava perdido.”
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-5 border-t border-[#1A2E22]/8 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-full bg-[#1A2E22] text-[#F3F1EB] font-semibold text-xs flex items-center justify-center tracking-wider shadow-sm shrink-0">
+                                RM
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-[#1A2E22]">Rafael M., 37 anos</h4>
+                                <p class="text-[11px] text-[#16A34A] font-medium flex items-center gap-1">
+                                    <iconify-icon icon="solar:check-circle-bold" class="text-xs"></iconify-icon>
+                                    Paciente Casa Nutrição
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         DOBRA 5 — DO WHATSAPP AO ACOMPANHAMENTO (COMO FUNCIONA)
+    ══════════════════════════════════════ -->
+    <section id="como-funciona" class="bg-[#1A2E22] text-[#F3F1EB] py-16 md:py-24 px-6 sm:px-8 lg:px-8 relative overflow-hidden">
+        
+        <!-- Luz ambiente radial suave de fundo -->
+        <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-[#4ADE80]/5 rounded-full blur-[140px]"></div>
+        <div class="pointer-events-none absolute bottom-0 right-0 w-[500px] h-[400px] bg-[#86EFAC]/5 rounded-full blur-[120px]"></div>
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            
+            <!-- Cabeçalho da Dobra 5 -->
+            <div class="text-center max-w-[330px] sm:max-w-xl md:max-w-3xl mx-auto mb-10 md:mb-14 px-1 sm:px-0">
+                <div class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/5 border border-[#86EFAC]/30 text-[#86EFAC] text-[11px] sm:text-xs font-semibold tracking-wider uppercase mb-4 backdrop-blur-md shadow-[0_0_15px_rgba(74,222,128,0.1)]">
+                    <span class="w-2 h-2 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
+                    Jornada Sem Complicações
+                </div>
+                
+                <h2 class="font-display text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.2] text-[#F3F1EB] tracking-tight mb-3 max-w-xs sm:max-w-none mx-auto">
+                    Do primeiro contato ao acompanhamento: <span class="text-highlight">como funciona</span>
+                </h2>
+                
+                <p class="text-[13.5px] sm:text-base text-[#F3F1EB]/70 max-w-xs sm:max-w-xl mx-auto leading-relaxed">
+                    Um passo a passo transparente, leve e pensado para caber na sua rotina desde o primeiro dia.
+                </p>
+            </div>
+
+            <!-- Grade Alternada com Fotos Compactas e Respiro Lateral no Mobile -->
+            <div class="space-y-7 md:space-y-12 max-w-[325px] sm:max-w-md md:max-w-5xl mx-auto w-full relative">
+                
+                <!-- ══════ ETAPA 01 ══════ -->
+                <div id="step-row-1" data-step-index="1" class="step-row flex flex-col md:flex-row items-center gap-5 sm:gap-6 lg:gap-10">
+                    <!-- Coluna de Texto (Esquerda no Desktop) -->
+                    <div class="flex-1 w-full flex flex-col justify-center order-1 md:order-1">
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-[#86EFAC]/40 bg-[#86EFAC]/10 flex items-center justify-center text-[#86EFAC] font-mono text-xs font-semibold mb-2 shadow-[0_0_12px_rgba(74,222,128,0.15)]">
+                            01
+                        </div>
+                        <h3 class="font-display text-2xl sm:text-3xl lg:text-[2.1rem] text-[#F3F1EB] leading-tight mb-1.5 min-h-[2rem]">
+                            <span id="tw-title-1"></span>
+                        </h3>
+                        <p class="text-xs sm:text-base text-[#F3F1EB]/80 leading-relaxed min-h-[2.4rem]">
+                            <span id="tw-desc-1"></span>
+                            <span id="tw-cursor-1" class="typewriter-cursor hidden-cursor"></span>
+                        </p>
+                    </div>
+
+                    <!-- Coluna de Foto (Direita no Desktop) - Mão com celular no WhatsApp -->
+                    <div class="flex-1 w-full order-2 md:order-2">
+                        <div id="step-photo-1" class="step-photo relative h-40 sm:h-48 md:h-[220px] w-full rounded-2xl md:rounded-3xl overflow-hidden border border-[#86EFAC]/25 shadow-[0_12px_32px_rgba(0,0,0,0.45)] group">
+                            <img src="etapa1-whatsapp.jpg" alt="Mão segurando smartphone com conversa no WhatsApp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#1A2E22]/60 via-transparent to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════ ETAPA 02 ══════ -->
+                <div id="step-row-2" data-step-index="2" class="step-row flex flex-col md:flex-row items-center gap-5 sm:gap-6 lg:gap-10">
+                    <!-- Coluna de Foto (Esquerda no Desktop - Alternado) - Nutricionista conversando com paciente na clínica -->
+                    <div class="flex-1 w-full order-2 md:order-1">
+                        <div id="step-photo-2" class="step-photo relative h-40 sm:h-48 md:h-[220px] w-full rounded-2xl md:rounded-3xl overflow-hidden border border-[#86EFAC]/25 shadow-[0_12px_32px_rgba(0,0,0,0.45)] group">
+                            <img src="etapa2-consulta.jpg" alt="Nutricionista em atendimento humanizado conversando com paciente em consultório" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#1A2E22]/60 via-transparent to-transparent"></div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna de Texto (Direita no Desktop) -->
+                    <div class="flex-1 w-full flex flex-col justify-center order-1 md:order-2">
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-[#86EFAC]/40 bg-[#86EFAC]/10 flex items-center justify-center text-[#86EFAC] font-mono text-xs font-semibold mb-2 shadow-[0_0_12px_rgba(74,222,128,0.15)]">
+                            02
+                        </div>
+                        <h3 class="font-display text-2xl sm:text-3xl lg:text-[2.1rem] text-[#F3F1EB] leading-tight mb-1.5 min-h-[2rem]">
+                            <span id="tw-title-2"></span>
+                        </h3>
+                        <p class="text-xs sm:text-base text-[#F3F1EB]/80 leading-relaxed min-h-[2.4rem]">
+                            <span id="tw-desc-2"></span>
+                            <span id="tw-cursor-2" class="typewriter-cursor hidden-cursor"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ══════ ETAPA 03 ══════ -->
+                <div id="step-row-3" data-step-index="3" class="step-row flex flex-col md:flex-row items-center gap-5 sm:gap-6 lg:gap-10">
+                    <!-- Coluna de Texto (Esquerda no Desktop) -->
+                    <div class="flex-1 w-full flex flex-col justify-center order-1 md:order-1">
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-[#86EFAC]/40 bg-[#86EFAC]/10 flex items-center justify-center text-[#86EFAC] font-mono text-xs font-semibold mb-2 shadow-[0_0_12px_rgba(74,222,128,0.15)]">
+                            03
+                        </div>
+                        <h3 class="font-display text-2xl sm:text-3xl lg:text-[2.1rem] text-[#F3F1EB] leading-tight mb-1.5 min-h-[2rem]">
+                            <span id="tw-title-3"></span>
+                        </h3>
+                        <p class="text-xs sm:text-base text-[#F3F1EB]/80 leading-relaxed min-h-[2.4rem]">
+                            <span id="tw-desc-3"></span>
+                            <span id="tw-cursor-3" class="typewriter-cursor hidden-cursor"></span>
+                        </p>
+                    </div>
+
+                    <!-- Coluna de Foto (Direita no Desktop) -->
+                    <div class="flex-1 w-full order-2 md:order-2">
+                        <div id="step-photo-3" class="step-photo relative h-40 sm:h-48 md:h-[220px] w-full rounded-2xl md:rounded-3xl overflow-hidden border border-[#86EFAC]/25 shadow-[0_12px_32px_rgba(0,0,0,0.45)] group">
+                            <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=900&auto=format&fit=crop" alt="Plano flexível e lista de compras prática" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#1A2E22]/60 via-transparent to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════ ETAPA 04 ══════ -->
+                <div id="step-row-4" data-step-index="4" class="step-row flex flex-col md:flex-row items-center gap-5 sm:gap-6 lg:gap-10">
+                    <!-- Coluna de Foto (Esquerda no Desktop - Alternado) - Mensagens e fotos de comida no WhatsApp -->
+                    <div class="flex-1 w-full order-2 md:order-1">
+                        <div id="step-photo-4" class="step-photo relative h-40 sm:h-48 md:h-[220px] w-full rounded-2xl md:rounded-3xl overflow-hidden border border-[#86EFAC]/25 shadow-[0_12px_32px_rgba(0,0,0,0.45)] group bg-[#16271c]">
+                            <!-- Mockup / Visual realista de conversa WhatsApp com fotos de refeição -->
+                            <div class="w-full h-full p-3.5 flex flex-col justify-center bg-gradient-to-br from-[#1b3425] to-[#122218] select-none">
+                                <div class="max-w-[280px] sm:max-w-[320px] mx-auto w-full space-y-2">
+                                    <!-- Mensagem Paciente com foto da refeição -->
+                                    <div class="bg-[#005c4b] text-[#E9EDEF] rounded-2xl rounded-tr-sm p-2.5 ml-auto max-w-[85%] shadow-md border border-white/10 text-xs">
+                                        <div class="rounded-xl overflow-hidden mb-1.5 h-20 w-full relative">
+                                            <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=400&auto=format&fit=crop" alt="Prato saudável enviado no WhatsApp" class="w-full h-full object-cover">
+                                        </div>
+                                        <p class="leading-tight text-[11px] text-white/90">"Almoço de hoje bem rápido como você sugeriu! Deu super certo 🙌"</p>
+                                        <div class="text-[9px] text-[#86EFAC]/70 text-right mt-1">12:42 ✓✓</div>
+                                    </div>
+                                    <!-- Resposta da Nutricionista -->
+                                    <div class="bg-[#202c33] text-[#E9EDEF] rounded-2xl rounded-tl-sm p-2.5 mr-auto max-w-[88%] shadow-md border border-white/10 text-xs">
+                                        <div class="text-[10px] text-[#4ADE80] font-medium mb-0.5">Dra. Camila · Casa Nutrição</div>
+                                        <p class="leading-tight text-[11px] text-white/90">"Ficou excelente! Ótima proporção de proteína e salada. Pode manter assim!" ✨</p>
+                                        <div class="text-[9px] text-white/50 text-right mt-0.5">12:45</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna de Texto (Direita no Desktop) -->
+                    <div class="flex-1 w-full flex flex-col justify-center order-1 md:order-2">
+                        <div class="w-10 h-10 rounded-lg border border-[#86EFAC]/40 bg-[#86EFAC]/10 flex items-center justify-center text-[#86EFAC] font-mono text-xs font-semibold mb-2.5 shadow-[0_0_12px_rgba(74,222,128,0.15)]">
+                            04
+                        </div>
+                        <h3 class="font-display text-2xl sm:text-3xl lg:text-[2.1rem] text-[#F3F1EB] leading-tight mb-2 min-h-[2rem]">
+                            <span id="tw-title-4"></span>
+                        </h3>
+                        <p class="text-sm sm:text-base text-[#F3F1EB]/80 leading-relaxed min-h-[2.4rem]">
+                            <span id="tw-desc-4"></span>
+                            <span id="tw-cursor-4" class="typewriter-cursor hidden-cursor"></span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Script de Digitação Bidirecional e Aparição Sincronizada das Fotos -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const stepsData = [
+            {
+                index: 1,
+                rowEl: document.getElementById('step-row-1'),
+                titleEl: document.getElementById('tw-title-1'),
+                descEl: document.getElementById('tw-desc-1'),
+                cursorEl: document.getElementById('tw-cursor-1'),
+                photoEl: document.getElementById('step-photo-1'),
+                titleText: "Você chama no WhatsApp",
+                descText: "e escolhe: consulta presencial ou online.",
+                status: 'idle', // 'idle' | 'typing' | 'done'
+                abortCtrl: null,
+                isIntersecting: false
+            },
+            {
+                index: 2,
+                rowEl: document.getElementById('step-row-2'),
+                titleEl: document.getElementById('tw-title-2'),
+                descEl: document.getElementById('tw-desc-2'),
+                cursorEl: document.getElementById('tw-cursor-2'),
+                photoEl: document.getElementById('step-photo-2'),
+                titleText: "Primeira consulta.",
+                descText: "Conversamos sobre a sua rotina, sua história com a comida e o que você quer mudar.",
+                status: 'idle',
+                abortCtrl: null,
+                isIntersecting: false
+            },
+            {
+                index: 3,
+                rowEl: document.getElementById('step-row-3'),
+                titleEl: document.getElementById('tw-title-3'),
+                descEl: document.getElementById('tw-desc-3'),
+                cursorEl: document.getElementById('tw-cursor-3'),
+                photoEl: document.getElementById('step-photo-3'),
+                titleText: "Você recebe um plano pensado para você,",
+                descText: "com lista de compras e opções rápidas.",
+                status: 'idle',
+                abortCtrl: null,
+                isIntersecting: false
+            },
+            {
+                index: 4,
+                rowEl: document.getElementById('step-row-4'),
+                titleEl: document.getElementById('tw-title-4'),
+                descEl: document.getElementById('tw-desc-4'),
+                cursorEl: document.getElementById('tw-cursor-4'),
+                photoEl: document.getElementById('step-photo-4'),
+                titleText: "Acompanhamento.",
+                descText: "Retorno a cada 15 dias, com ajustes no WhatsApp entre uma consulta e outra. Você decide se quer seguir no plano de 3 meses.",
+                status: 'idle',
+                abortCtrl: null,
+                isIntersecting: false
+            }
+        ];
+
+        // Pausa com suporte a cancelamento imediato
+        function wait(ms, signal) {
+            return new Promise((resolve, reject) => {
+                if (signal && signal.aborted) {
+                    return reject(new Error('aborted'));
+                }
+                const timer = setTimeout(() => {
+                    resolve();
+                }, ms);
+                if (signal) {
+                    signal.addEventListener('abort', () => {
+                        clearTimeout(timer);
+                        reject(new Error('aborted'));
+                    }, { once: true });
+                }
+            });
+        }
+
+        // Digitação caractere por caractere
+        async function typeString(element, text, speed, signal) {
+            element.textContent = '';
+            for (let i = 0; i < text.length; i++) {
+                if (signal && signal.aborted) throw new Error('aborted');
+                element.textContent += text[i];
+                await wait(speed, signal);
+            }
+        }
+
+        // Reseta o passo ao sair de vista para poder animar novamente ao rolar para cima ou para baixo
+        function resetStep(step) {
+            if (step.abortCtrl) {
+                step.abortCtrl.abort();
+                step.abortCtrl = null;
+            }
+            step.status = 'idle';
+            if (step.titleEl) step.titleEl.textContent = '';
+            if (step.descEl) step.descEl.textContent = '';
+            if (step.cursorEl) step.cursorEl.classList.add('hidden-cursor');
+            if (step.photoEl) step.photoEl.classList.remove('is-active');
+        }
+
+        // Executa a animação de um passo individual
+        async function animateStep(step) {
+            if (step.status === 'typing' || step.status === 'done') return;
+            step.status = 'typing';
+
+            const ctrl = new AbortController();
+            step.abortCtrl = ctrl;
+            const { signal } = ctrl;
+
+            try {
+                // 1. Revela a foto com transição suave
+                if (step.photoEl) {
+                    step.photoEl.classList.add('is-active');
+                }
+
+                // 2. Digita o título (~7ms por letra - super rápido e ágil)
+                if (step.titleEl && step.titleText) {
+                    if (step.cursorEl) {
+                        step.cursorEl.classList.remove('hidden-cursor');
+                        step.titleEl.appendChild(step.cursorEl);
+                    }
+                    await typeString(step.titleEl, step.titleText, 7, signal);
+                }
+
+                await wait(30, signal);
+
+                // 3. Move o cursor e digita a descrição (~2ms por letra - quase instantâneo)
+                if (step.descEl && step.descText) {
+                    if (step.cursorEl) {
+                        step.descEl.appendChild(step.cursorEl);
+                    }
+                    await typeString(step.descEl, step.descText, 2, signal);
+                }
+
+                // 4. Pausa com cursor piscando no final antes de ocultar
+                await wait(150, signal);
+
+                if (step.cursorEl) {
+                    step.cursorEl.classList.add('hidden-cursor');
+                }
+
+                step.status = 'done';
+                step.abortCtrl = null;
+            } catch (err) {
+                // Interrompido pelo scroll (abort)
+                step.status = 'idle';
+                step.abortCtrl = null;
+            }
+        }
+
+        let isLoopRunning = false;
+
+        // Fila que processa passos visíveis
+        async function processVisibleSteps() {
+            if (isLoopRunning) return;
+            isLoopRunning = true;
+
+            while (true) {
+                // Busca o próximo passo que está na tela e ainda não animou
+                const nextStep = stepsData.find(s => s.isIntersecting && s.status === 'idle');
+                if (!nextStep) break;
+
+                await animateStep(nextStep);
+                await wait(60);
+            }
+
+            isLoopRunning = false;
+        }
+
+        // Observer independente para cada linha de passo
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const stepIndex = entry.target.dataset.stepIndex;
+                const step = stepsData.find(s => s.index == stepIndex);
+                if (!step) return;
+
+                if (entry.isIntersecting) {
+                    step.isIntersecting = true;
+                    processVisibleSteps();
+                } else {
+                    step.isIntersecting = false;
+                    // Se o usuário rolar para fora deste passo (subindo ou descendo),
+                    // reseta para animar de novo quando ele voltar
+                    resetStep(step);
+                }
+            });
+        }, {
+            threshold: 0.25,
+            rootMargin: '0px 0px -5% 0px'
+        });
+
+        stepsData.forEach(s => {
+            if (s.rowEl) {
+                observer.observe(s.rowEl);
+            }
+        });
+    });
+    </script>
+
+    <!-- ══════════════════════════════════════
+         DOBRA 6 — PERGUNTAS FREQUENTES (FAQ)
+    ══════════════════════════════════════ -->
+    <section id="faq" class="bg-[#1A2E22] text-[#F3F1EB] py-20 md:py-28 px-6 sm:px-8 lg:px-8 relative overflow-hidden">
+        
+        <!-- Luz ambiente radial suave de fundo -->
+        <div class="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[#4ADE80]/5 rounded-full blur-[140px]"></div>
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            
+            <!-- Cabeçalho da Seção de FAQ - Respiro e tipografia equilibrada no mobile -->
+            <div class="text-center max-w-[330px] sm:max-w-xl md:max-w-3xl mx-auto mb-10 md:mb-16 px-1 sm:px-0">
+                <div class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-white/5 border border-[#86EFAC]/30 text-[#86EFAC] text-[11px] sm:text-xs font-semibold tracking-wider uppercase mb-4 backdrop-blur-md shadow-[0_0_15px_rgba(74,222,128,0.1)]">
+                    <span class="w-2 h-2 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
+                    Tire suas dúvidas
+                </div>
+                
+                <h2 class="font-display text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.2] text-[#F3F1EB] tracking-tight mb-3.5 sm:mb-4 max-w-xs sm:max-w-none mx-auto">
+                    Sei o que você está pensando.<br class="hidden sm:inline">
+                    <span class="text-highlight">Já ouvimos todas as perguntas.</span>
+                </h2>
+                
+                <p class="text-[13.5px] sm:text-base text-[#F3F1EB]/70 max-w-xs sm:max-w-xl mx-auto font-sans leading-relaxed">
+                    Transparência total sobre nosso acompanhamento,<br class="hidden sm:inline">
+                    metodologia e rotina de consultas.
+                </p>
+            </div>
+
+            <!-- Grade de FAQ em 2 Colunas - Ajustada com respiro lateral e caixas proporcionais no mobile -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 lg:gap-5 max-w-[325px] sm:max-w-md md:max-w-5xl mx-auto w-full items-start">
+                
+                <!-- ══════ COLUNA DA ESQUERDA ══════ -->
+                <div class="space-y-4">
+                    
+                    <!-- FAQ 1 -->
+                    <div class="faq-item bg-[#F3F1EB] rounded-2xl border border-white/20 shadow-sm transition-all duration-300 overflow-hidden flex flex-col justify-start">
+                        <button type="button" class="faq-toggle w-full min-h-[74px] sm:min-h-[78px] px-5 py-4 sm:px-6 sm:py-4.5 flex items-center justify-between text-left gap-4 transition-colors">
+                            <span class="font-sans font-semibold text-sm sm:text-[15px] text-[#1A2E22] leading-snug">
+                                “Vou ter que cortar tudo o que gosto?”
+                            </span>
+                            <div class="faq-icon-wrapper w-7 h-7 rounded-full bg-[#1A2E22]/5 flex items-center justify-center shrink-0 transition-transform duration-300">
+                                <iconify-icon icon="solar:alt-arrow-down-linear" class="text-base text-[#1A2E22] transition-transform duration-300"></iconify-icon>
+                            </div>
+                        </button>
+                        <div class="faq-answer grid grid-rows-[0fr] transition-all duration-300 ease-in-out">
+                            <div class="overflow-hidden">
+                                <div class="px-5 pb-5 sm:px-6 sm:pb-5 pt-1 text-xs sm:text-sm text-[#1A2E22]/80 leading-relaxed font-sans border-t border-[#1A2E22]/10 mt-1">
+                                    O plano é montado a partir da sua rotina e das suas preferências. A ideia é um cardápio flexível, não uma lista de proibições.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="faq-item bg-[#F3F1EB] rounded-2xl border border-white/20 shadow-sm transition-all duration-300 overflow-hidden flex flex-col justify-start">
+                        <button type="button" class="faq-toggle w-full min-h-[74px] sm:min-h-[78px] px-5 py-4 sm:px-6 sm:py-4.5 flex items-center justify-between text-left gap-4 transition-colors">
+                            <span class="font-sans font-semibold text-sm sm:text-[15px] text-[#1A2E22] leading-snug">
+                                “Já fiz de tudo e não funcionou.”
+                            </span>
+                            <div class="faq-icon-wrapper w-7 h-7 rounded-full bg-[#1A2E22]/5 flex items-center justify-center shrink-0 transition-transform duration-300">
+                                <iconify-icon icon="solar:alt-arrow-down-linear" class="text-base text-[#1A2E22] transition-transform duration-300"></iconify-icon>
+                            </div>
+                        </button>
+                        <div class="faq-answer grid grid-rows-[0fr] transition-all duration-300 ease-in-out">
+                            <div class="overflow-hidden">
+                                <div class="px-5 pb-5 sm:px-6 sm:pb-5 pt-1 text-xs sm:text-sm text-[#1A2E22]/80 leading-relaxed font-sans border-t border-[#1A2E22]/10 mt-1">
+                                    Muita gente chega aqui depois de abandonar uma dieta que não cabia na vida dela. Não prometemos resultado, e sim um plano que se ajusta junto com a sua rotina, com acompanhamento a cada 15 dias.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="faq-item bg-[#F3F1EB] rounded-2xl border border-white/20 shadow-sm transition-all duration-300 overflow-hidden flex flex-col justify-start">
+                        <button type="button" class="faq-toggle w-full min-h-[74px] sm:min-h-[78px] px-5 py-4 sm:px-6 sm:py-4.5 flex items-center justify-between text-left gap-4 transition-colors">
+                            <span class="font-sans font-semibold text-sm sm:text-[15px] text-[#1A2E22] leading-snug">
+                                “Não tenho tempo de cozinhar.”
+                            </span>
+                            <div class="faq-icon-wrapper w-7 h-7 rounded-full bg-[#1A2E22]/5 flex items-center justify-center shrink-0 transition-transform duration-300">
+                                <iconify-icon icon="solar:alt-arrow-down-linear" class="text-base text-[#1A2E22] transition-transform duration-300"></iconify-icon>
+                            </div>
+                        </button>
+                        <div class="faq-answer grid grid-rows-[0fr] transition-all duration-300 ease-in-out">
+                            <div class="overflow-hidden">
+                                <div class="px-5 pb-5 sm:px-6 sm:pb-5 pt-1 text-xs sm:text-sm text-[#1A2E22]/80 leading-relaxed font-sans border-t border-[#1A2E22]/10 mt-1">
+                                    Você recebe lista de compras e opções de refeição rápida, pensadas para a rotina corrida.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ══════ COLUNA DA DIREITA ══════ -->
+                <div class="space-y-4">
+                    
+                    <!-- FAQ 4 -->
+                    <div class="faq-item bg-[#F3F1EB] rounded-2xl border border-white/20 shadow-sm transition-all duration-300 overflow-hidden flex flex-col justify-start">
+                        <button type="button" class="faq-toggle w-full min-h-[74px] sm:min-h-[78px] px-5 py-4 sm:px-6 sm:py-4.5 flex items-center justify-between text-left gap-4 transition-colors">
+                            <span class="font-sans font-semibold text-sm sm:text-[15px] text-[#1A2E22] leading-snug">
+                                “Tenho vergonha de ser julgada.”
+                            </span>
+                            <div class="faq-icon-wrapper w-7 h-7 rounded-full bg-[#1A2E22]/5 flex items-center justify-center shrink-0 transition-transform duration-300">
+                                <iconify-icon icon="solar:alt-arrow-down-linear" class="text-base text-[#1A2E22] transition-transform duration-300"></iconify-icon>
+                            </div>
+                        </button>
+                        <div class="faq-answer grid grid-rows-[0fr] transition-all duration-300 ease-in-out">
+                            <div class="overflow-hidden">
+                                <div class="px-5 pb-5 sm:px-6 sm:pb-5 pt-1 text-xs sm:text-sm text-[#1A2E22]/80 leading-relaxed font-sans border-t border-[#1A2E22]/10 mt-1">
+                                    Aqui não tem julgamento. O nosso trabalho é escutar e ajustar o plano com você.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div class="faq-item bg-[#F3F1EB] rounded-2xl border border-white/20 shadow-sm transition-all duration-300 overflow-hidden flex flex-col justify-start">
+                        <button type="button" class="faq-toggle w-full min-h-[74px] sm:min-h-[78px] px-5 py-4 sm:px-6 sm:py-4.5 flex items-center justify-between text-left gap-4 transition-colors">
+                            <span class="font-sans font-semibold text-sm sm:text-[15px] text-[#1A2E22] leading-snug">
+                                “Vale pagar por acompanhamento? Tem app e profissional mais barato.”
+                            </span>
+                            <div class="faq-icon-wrapper w-7 h-7 rounded-full bg-[#1A2E22]/5 flex items-center justify-center shrink-0 transition-transform duration-300">
+                                <iconify-icon icon="solar:alt-arrow-down-linear" class="text-base text-[#1A2E22] transition-transform duration-300"></iconify-icon>
+                            </div>
+                        </button>
+                        <div class="faq-answer grid grid-rows-[0fr] transition-all duration-300 ease-in-out">
+                            <div class="overflow-hidden">
+                                <div class="px-5 pb-5 sm:px-6 sm:pb-5 pt-1 text-xs sm:text-sm text-[#1A2E22]/80 leading-relaxed font-sans border-t border-[#1A2E22]/10 mt-1">
+                                    App não escuta a sua rotina nem ajusta quando a vida muda. Aqui você tem uma nutricionista que acompanha o seu caso, com retorno a cada 15 dias e ajustes pelo WhatsApp entre as consultas. Os valores e as condições de pagamento você recebe direto no WhatsApp, antes de decidir qualquer coisa.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 6 -->
+                    <div class="faq-item bg-[#F3F1EB] rounded-2xl border border-white/20 shadow-sm transition-all duration-300 overflow-hidden flex flex-col justify-start">
+                        <button type="button" class="faq-toggle w-full min-h-[74px] sm:min-h-[78px] px-5 py-4 sm:px-6 sm:py-4.5 flex items-center justify-between text-left gap-4 transition-colors">
+                            <span class="font-sans font-semibold text-sm sm:text-[15px] text-[#1A2E22] leading-snug">
+                                “Preciso ir até a clínica ou dá para fazer online?”
+                            </span>
+                            <div class="faq-icon-wrapper w-7 h-7 rounded-full bg-[#1A2E22]/5 flex items-center justify-center shrink-0 transition-transform duration-300">
+                                <iconify-icon icon="solar:alt-arrow-down-linear" class="text-base text-[#1A2E22] transition-transform duration-300"></iconify-icon>
+                            </div>
+                        </button>
+                        <div class="faq-answer grid grid-rows-[0fr] transition-all duration-300 ease-in-out">
+                            <div class="overflow-hidden">
+                                <div class="px-5 pb-5 sm:px-6 sm:pb-5 pt-1 text-xs sm:text-sm text-[#1A2E22]/80 leading-relaxed font-sans border-t border-[#1A2E22]/10 mt-1">
+                                    Você escolhe o formato que cabe na sua rotina. Atendemos presencial e online, e o ajuste pelo WhatsApp entre as consultas faz parte do acompanhamento.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         DOBRA 7 — CTA FINAL (DÊ O PRIMEIRO PASSO)
+    ══════════════════════════════════════ -->
+    <section class="bg-[#F3F1EB] text-[#1A2E22] py-20 md:py-28 px-6 sm:px-8 lg:px-8 border-t border-[#1A2E22]/10 relative overflow-hidden">
+        <div class="max-w-[305px] sm:max-w-xl md:max-w-4xl mx-auto text-center relative z-10 px-2 sm:px-0">
+            
+            <!-- Badge / Tag Superior -->
+            <div class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-white border border-[#1A2E22]/10 text-[#1A2E22]/70 text-[11px] sm:text-xs font-semibold tracking-wider uppercase mb-5 sm:mb-6 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#16A34A]"></span>
+                Sem Compromisso
+            </div>
+
+            <!-- Headline em Tangier (Quebra em 2 linhas com respiro lateral generoso) -->
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl lg:text-[2.85rem] leading-[1.22] text-[#1A2E22] tracking-tight mb-5 sm:mb-6 max-w-xs sm:max-w-none mx-auto">
+                Dê o primeiro passo:<br>
+                <span class="text-highlight-dark">sem precisar decidir o plano hoje</span>
+            </h2>
+
+            <!-- Texto Principal em Inter - Respiro nas bordas -->
+            <p class="font-sans text-[13.5px] sm:text-base md:text-lg text-[#1A2E22]/80 leading-[1.55] sm:leading-relaxed max-w-[285px] sm:max-w-2xl mx-auto mb-4">
+                Na primeira consulta você não precisa fechar nada. Você conhece a clínica, conversa com a nutricionista e decide depois se faz sentido seguir com o acompanhamento. Se tiver dúvida sobre valores, é só perguntar no WhatsApp.
+            </p>
+
+            <!-- Subtexto de Apoio -->
+            <p class="font-sans text-xs sm:text-sm md:text-base text-[#1A2E22]/65 font-medium mb-7 sm:mb-10 max-w-[270px] sm:max-w-none mx-auto leading-relaxed">
+                Agende sua primeira consulta pelo WhatsApp, presencial ou online.
+            </p>
+
+            <!-- Botão com Flash de Luz (#1A2E22 + btn-shine) - Compacto e reduzido nas laterais -->
+            <div class="flex items-center justify-center">
+                <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20minha%20primeira%20consulta." target="_blank" rel="noopener noreferrer" class="btn-shine inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-[#1A2E22] text-[#F3F1EB] font-sans font-semibold text-xs sm:text-base shadow-xl hover:bg-[#233d2e] transition-all duration-300 transform hover:-translate-y-0.5 border border-[#86EFAC]/30">
+                    <iconify-icon icon="solar:chat-round-dots-bold" class="text-lg sm:text-xl text-[#4ADE80]"></iconify-icon>
+                    <span>AGENDAR PELO WHATSAPP</span>
+                </a>
+            </div>
+
+            <!-- Garantia e Apoio Sutil -->
+            <div class="mt-7 sm:mt-8 flex flex-wrap items-center justify-center gap-y-2 gap-x-3.5 sm:gap-6 text-[11px] sm:text-xs text-[#1A2E22]/60 max-w-[290px] sm:max-w-none mx-auto">
+                <div class="flex items-center gap-1.5">
+                    <iconify-icon icon="solar:shield-check-linear" class="text-base text-[#16A34A]"></iconify-icon>
+                    <span>Sem taxa oculta</span>
+                </div>
+                <span class="hidden sm:inline">•</span>
+                <div class="flex items-center gap-1.5">
+                    <iconify-icon icon="solar:clock-circle-linear" class="text-base text-[#16A34A]"></iconify-icon>
+                    <span>Atendimento rápido</span>
+                </div>
+                <span class="hidden sm:inline">•</span>
+                <div class="flex items-center gap-1.5">
+                    <iconify-icon icon="solar:buildings-2-linear" class="text-base text-[#16A34A]"></iconify-icon>
+                    <span>Presencial ou Online</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         RODAPÉ (FOOTER)
+    ══════════════════════════════════════ -->
+    <footer class="bg-[#1A2E22] text-[#F3F1EB] py-6 px-4 sm:px-6 lg:px-8 border-t border-[#86EFAC]/20 text-center">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#F3F1EB]/70 font-sans">
+            <div class="flex items-center gap-2">
+                <span class="font-display text-lg text-[#F3F1EB] tracking-wide">Casa Nutrição</span>
+                <span class="text-[#86EFAC]/40">•</span>
+                <span>Nutrição Clínica & Comportamental</span>
+            </div>
+            <p>
+                Casa Nutrição - Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Script Sanfona / Accordion da FAQ -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const item = toggle.closest('.faq-item');
+                const answer = item.querySelector('.faq-answer');
+                const icon = toggle.querySelector('iconify-icon');
+                const isOpen = answer.classList.contains('grid-rows-[1fr]');
+
+                // Fecha outros itens caso queira accordion exclusivo ou apenas alterna
+                if (isOpen) {
+                    answer.classList.remove('grid-rows-[1fr]');
+                    answer.classList.add('grid-rows-[0fr]');
+                    icon.style.transform = 'rotate(0deg)';
+                    item.classList.remove('ring-2', 'ring-[#86EFAC]/50');
+                } else {
+                    answer.classList.remove('grid-rows-[0fr]');
+                    answer.classList.add('grid-rows-[1fr]');
+                    icon.style.transform = 'rotate(180deg)';
+                    item.classList.add('ring-2', 'ring-[#86EFAC]/50');
+                }
+            });
+        });
+    });
+    </script>
+
+    <!-- Script de Revelação Bidirecional ao Rolar a Página (Exceto Dobra 5) -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Seleciona elementos-chave em todas as dobras exceto Dobra 5 (#como-funciona)
+        const targetElements = document.querySelectorAll(`
+            header > div,
+            section:not(#como-funciona) .max-w-3xl,
+            section:not(#como-funciona) .max-w-4xl,
+            section:not(#como-funciona) .max-w-5xl,
+            section:not(#como-funciona) .max-w-6xl,
+            section:not(#como-funciona) .faq-item,
+            section:not(#como-funciona) [class*="group flex flex-col"]
+        `);
+
+        targetElements.forEach(el => {
+            // Garante que não esteja dentro de #como-funciona
+            if (!el.closest('#como-funciona')) {
+                el.classList.add('reveal-item');
+            }
+        });
+
+        // IntersectionObserver Bidirecional: aparece ao entrar, reseta ao sair (ao descer ou subir)
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-revealed');
+                } else {
+                    // Ao rolar para fora (para cima ou para baixo), reseta para revelar de novo
+                    entry.target.classList.remove('is-revealed');
+                }
+            });
+        }, {
+            threshold: 0.12,
+            rootMargin: '0px 0px -5% 0px'
+        });
+
+        document.querySelectorAll('.reveal-item').forEach(el => {
+            revealObserver.observe(el);
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa Nutrição — Planos Alimentares Personalizados</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<!-- GSAP & ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── LOGO & TITLES FONT ───────────────────────── */
+@font-face {
+  font-family: 'Tangier';
+  src: url('tangier/Tangier.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-forest: #1A2E22;
+  --color-bone: #F3F1EB;
+  --color-green-200: #BBF7D0;
+  --color-green-300: #86EFAC;
+  --color-green-400: #4ADE80;
+  --font-display: 'Tangier', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bone);
+  color: var(--color-forest);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .serif-font, .font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ─── TEXT GRADIENT HIGHLIGHT ──────────────────── */
+.text-highlight {
+  background: linear-gradient(135deg, #A7F3D0 0%, #4ADE80 50%, #22C55E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* ─── BUTTON FLASH / SHINE EFFECT ──────────────── */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -120%;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.03) 75%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  animation: buttonShine 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.btn-shine:hover::after {
+  animation: buttonShineFast 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes buttonShine {
+  0% { left: -130%; }
+  25% { left: 140%; }
+  100% { left: 140%; }
+}
+@keyframes buttonShineFast {
+  0% { left: -130%; }
+  100% { left: 140%; }
+}
+
+/* Animation Utilities */
+.word-wrapper {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  margin-right: 0.25em;
+  padding-bottom: 0.1em;
+}
+.word {
+  display: inline-block;
+  transform: translateY(110%);
+}
+</style></head>
+<body class="antialiased selection:bg-[#1A2E22] selection:text-[#F3F1EB]">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-[#1A2E22]/90 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Left: Links -->
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-[#F3F1EB]/80">
+                    <a href="#metodo" class="hover:text-white transition-colors">Como Funciona</a>
+                    <a href="#consultas" class="hover:text-white transition-colors">Consultas</a>
+                    <a href="#sobre" class="hover:text-white transition-colors">Sobre Nós</a>
+                </div>
+
+                <!-- Center: Logo -->
+                <div class="flex items-center gap-2 md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
+                    <span class="font-display text-3xl sm:text-4xl text-[#F3F1EB] tracking-wide">Casa Nutrição</span>
+                </div>
+
+                <!-- Right: Actions -->
+                <div class="flex items-center space-x-4">
+                    <a href="https://wa.me/" target="_blank" class="hidden sm:inline-flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-[#86EFAC] hover:text-white transition-colors border border-[#86EFAC]/30 hover:border-white/40 px-3.5 py-1.5 rounded-full">
+                        <span class="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse"></span>
+                        Online agora
+                    </a>
+                    <a href="#agendar" class="bg-[#F3F1EB] text-[#1A2E22] px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide hover:scale-105 transition-all shadow-md">
+                        Agendar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section (Primeira Dobra) -->
+    <header class="relative min-h-[92vh] flex items-center justify-start overflow-hidden pt-28 pb-16">
+        <!-- Background Image com Parallax suave -->
+        <div class="absolute inset-0 z-0">
+            <img src="hero-bg.jpg" alt="Alimentação saudável e consciente" class="w-full h-full object-cover object-center scale-105 filter brightness-[0.85] contrast-[1.05]">
+            <!-- Degradê do verde mais escuro do design system (#1A2E22) cobrindo com elegância da esquerda para a direita e de cima para baixo -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#1A2E22] via-[#1A2E22]/90 md:via-[#1A2E22]/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#1A2E22] via-transparent to-[#1A2E22]/50"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8 md:py-16">
+            <div class="max-w-3xl">
+                <!-- Eyebrow / Tag -->
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#86EFAC] text-xs font-medium tracking-wide uppercase mb-6">
+                    <span class="w-2 h-2 rounded-full bg-[#4ADE80]"></span>
+                    Nutrição Comportamental &amp; Clínica
+                </div>
+
+                <!-- Headline quebrada em 3 linhas (conforme solicitado e na proporção da referência) -->
+                <h1 class="text-4xl sm:text-5xl lg:text-[4.2rem] font-display text-white leading-[1.12] tracking-tight mb-8">
+                    <span>Um plano de alimentação</span><br>
+                    <span>que cabe na sua rotina,</span><br>
+                    <span class="text-highlight">e acompanha você quando ela muda</span>
+                </h1>
+
+                <!-- Subheadline / Bloco com borda lateral estilo referência -->
+                <div class="border-l-2 border-[#86EFAC]/60 pl-5 mb-10 max-w-2xl bg-black/20 backdrop-blur-sm py-2 rounded-r-lg">
+                    <p class="text-base sm:text-lg text-[#F3F1EB]/90 leading-relaxed font-light">
+                        Consulta presencial ou online com nutricionista que escuta antes de prescrever. Sem julgamento, sem lista de proibições.
+                    </p>
+                </div>
+
+                <!-- Ações / CTAs com o flash de luz branca e estilo da referência -->
+                <div class="flex flex-wrap items-center gap-4 sm:gap-5 mb-12">
+                    <a href="#agendar" class="btn-shine inline-flex items-center justify-center gap-2.5 bg-[#1A2E22] hover:bg-[#15251b] text-white border border-[#86EFAC]/40 px-8 py-4 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all duration-300 shadow-2xl hover:scale-105 group">
+                        <span>AGENDAR MINHA PRIMEIRA CONSULTA</span>
+                        <iconify-icon icon="solar:calendar-date-bold-duotone" class="text-lg text-[#86EFAC] group-hover:translate-x-0.5 transition-transform"></iconify-icon>
+                    </a>
+
+                    <a href="https://wa.me/" target="_blank" class="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-[#F3F1EB] backdrop-blur-md border border-white/20 px-6 py-4 rounded-full text-xs sm:text-sm font-medium tracking-wide transition-all duration-300 hover:border-white/40">
+                        <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg text-[#86EFAC]"></iconify-icon>
+                        <span>Falar no WhatsApp</span>
+                    </a>
+                </div>
+
+                <!-- Trust Badges estilo da referência (rodapé do hero) -->
+                <div class="flex flex-wrap items-center gap-y-3 gap-x-6 pt-4 border-t border-white/15 text-xs text-[#F3F1EB]/75 font-medium">
+                    <div class="flex items-center gap-2">
+                        <iconify-icon icon="solar:check-circle-bold" class="text-[#86EFAC] text-base"></iconify-icon>
+                        <span>Atendimento Humanizado</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <iconify-icon icon="solar:shield-check-bold" class="text-[#86EFAC] text-base"></iconify-icon>
+                        <span>Presencial &amp; Online</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <iconify-icon icon="solar:heart-bold" class="text-[#86EFAC] text-base"></iconify-icon>
+                        <span>Sem Restrições Radicais</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+
+    <!-- Quote Section -->
+    <section class="py-24 px-4 bg-white border-y border-[#1A2E22]/5">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="reveal-text serif-font text-3xl md:text-5xl leading-tight font-light text-[#1A2E22] tracking-tight">
+                “A systemic protocol engineered to restore gut diversity and deliver sustained vitality without the glucose crash.”
+            </h2>
+        </div>
+    </section>
+
+    <!-- Ingredients Slider -->
+    <section class="py-20 max-w-7xl mx-auto px-4">
+        <div class="flex items-end justify-between mb-10">
+            <div>
+                <h3 class="serif-font text-3xl mb-2 reveal-text">Core Bio-actives</h3>
+                <p class="text-sm text-[#1A2E22]/60">Sourced from regenerative soil.</p>
+            </div>
+            <div class="flex gap-2">
+                <button class="w-10 h-10 rounded-full border border-[#1A2E22]/10 flex items-center justify-center hover:bg-[#1A2E22] hover:text-white transition-colors">
+                    <iconify-icon icon="solar:arrow-left-linear"></iconify-icon>
+                </button>
+                <button class="w-10 h-10 rounded-full border border-[#1A2E22]/10 flex items-center justify-center hover:bg-[#1A2E22] hover:text-white transition-colors">
+                    <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex gap-6 overflow-x-auto hide-scrollbar pb-10">
+            <!-- Item 1 -->
+            <div class="min-w-[200px] group cursor-pointer">
+                <div class="w-full aspect-square bg-white rounded-2xl mb-4 flex items-center justify-center p-8 group-hover:shadow-xl transition-all border border-[#1A2E22]/5 relative overflow-hidden">
+                    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e7c7ed03-8755-42ae-999f-46d3e957058d_800w.webp" class="w-full object-contain group-hover:scale-110 transition-transform duration-500" alt="Beetroot">
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="text-white text-xs font-medium bg-white/20 backdrop-blur px-3 py-1 rounded-full">Nitric Oxide Boost</span>
+                    </div>
+                </div>
+                <h4 class="font-medium">Beetroot</h4>
+                <p class="text-xs text-[#1A2E22]/50">Blood flow support</p>
+            </div>
+
+            <!-- Item 2 (Active Style) -->
+            <div class="min-w-[280px] cursor-pointer">
+                <div class="w-full aspect-square bg-[#1A2E22] rounded-2xl mb-4 flex items-center justify-center p-8 shadow-2xl relative overflow-hidden">
+                    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6a2605e1-058f-467a-bca2-16aacdb706a0_800w.webp" class="w-full object-contain" alt="Broccoli">
+                    <div class="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10">
+                         <p class="text-white text-xs leading-relaxed">
+                            <span class="font-semibold block mb-1">Sulforaphane</span>
+                            Activates Nrf2 pathway for cellular defense and detoxification.
+                        </p>
+                    </div>
+                </div>
+                <h4 class="font-medium">Sprouted Broccoli</h4>
+                <p class="text-xs text-[#1A2E22]/50">DNA protection</p>
+            </div>
+
+             <!-- Item 3 -->
+             <div class="min-w-[200px] group cursor-pointer">
+                <div class="w-full aspect-square bg-white rounded-2xl mb-4 flex items-center justify-center p-8 group-hover:shadow-xl transition-all border border-[#1A2E22]/5">
+                    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/50741f2a-b261-4e30-b0d5-8741eaebcc43_800w.webp" class="w-full object-contain group-hover:scale-110 transition-transform duration-500" alt="Sweet Potato">
+                </div>
+                <h4 class="font-medium">Sweet Potato</h4>
+                <p class="text-xs text-[#1A2E22]/50">Resistant starch</p>
+            </div>
+
+            <!-- Item 4 -->
+             <div class="min-w-[200px] group cursor-pointer">
+                <div class="w-full aspect-square bg-white rounded-2xl mb-4 flex items-center justify-center p-8 group-hover:shadow-xl transition-all border border-[#1A2E22]/5">
+                    <img src="https://pngimg.com/d/avocado_PNG15516.png" class="w-full object-contain group-hover:scale-110 transition-transform duration-500" alt="Avocado">
+                </div>
+                <h4 class="font-medium">Hass Avocado</h4>
+                <p class="text-xs text-[#1A2E22]/50">Monounsaturated fats</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax Feature Section -->
+    <section class="relative h-[600px] md:h-[800px] w-full overflow-hidden parallax-wrapper">
+        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/547c3ce0-1ee0-481b-b9ab-315feed727ac_3840w.webp" class="absolute inset-0 w-full h-[120%] object-cover parallax-img" alt="Nature">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#1A2E22] via-transparent to-transparent opacity-80 z-0"></div>
+        
+        <div class="relative z-10 h-full flex flex-col items-center justify-center px-4">
+            <h2 class="reveal-text text-white serif-font text-4xl md:text-6xl mb-12 text-center">Quantify your <br> biological progress.</h2>
+            
+            <!-- Glass Card UI -->
+            <div class="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 md:p-8 shadow-2xl transform translate-y-12 opacity-0 fade-up-element">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-white/80 text-xs uppercase tracking-wider">Live Biometrics</div>
+                    <iconify-icon icon="solar:wifi-router-minimalistic-bold" class="text-white"></iconify-icon>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between text-white text-sm mb-2">
+                            <span>Biological Age</span>
+                            <span class="text-green-300">-3.2 years</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-green-200 to-green-400 w-[75%]"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-white text-sm mb-2">
+                            <span>Vitalis Score</span>
+                            <span>92/100</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-green-200 to-green-400 w-[92%]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
+                    <div class="flex -space-x-3">
+                         <img src="https://i.pravatar.cc/100?img=12" class="w-8 h-8 rounded-full border-2 border-transparent" alt="User">
+                         <img src="https://i.pravatar.cc/100?img=15" class="w-8 h-8 rounded-full border-2 border-transparent" alt="User">
+                         <div class="w-8 h-8 rounded-full bg-white text-[#1A2E22] flex items-center justify-center text-[10px] font-bold">+2k</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-white text-2xl font-serif">4.8x</div>
+                        <div class="text-white/60 text-[10px]">Increased diversity</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="py-24 max-w-7xl mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b border-[#1A2E22]/10 pb-6">
+            <h2 class="reveal-text serif-font text-4xl md:text-5xl">Weekly Rotation</h2>
+            <div class="flex space-x-6 text-sm font-medium mt-6 md:mt-0 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 hide-scrollbar">
+                <button class="text-[#1A2E22] border-b-2 border-[#1A2E22] pb-1 whitespace-nowrap">Breakfast</button>
+                <button class="text-[#1A2E22]/40 hover:text-[#1A2E22] transition-colors pb-1 whitespace-nowrap">Lunch</button>
+                <button class="text-[#1A2E22]/40 hover:text-[#1A2E22] transition-colors pb-1 whitespace-nowrap">Dinner</button>
+                <button class="text-[#1A2E22]/40 hover:text-[#1A2E22] transition-colors pb-1 whitespace-nowrap">Functional Snacks</button>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-16">
+            <!-- List -->
+            <div class="space-y-0">
+                <!-- Item 1 -->
+                <div class="group py-8 border-b border-[#1A2E22]/10 cursor-pointer">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="inline-block px-2 py-0.5 rounded border border-[#1A2E22]/20 text-[10px] uppercase tracking-wider mb-2">Gluten-Free</span>
+                    </div>
+                    <h3 class="serif-font text-3xl group-hover:text-[#1A2E22]/70 transition-colors">Shrimp &amp; Quinoa</h3>
+                    <p class="text-sm text-[#1A2E22]/60 mt-2">Wild-caught shrimp with ancient grains, turmeric dressing, and fermented cabbage.</p>
+                    <div class="mt-4 flex gap-4 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+                        <span>25 mins</span>
+                        <span>•</span>
+                        <span>520 kcal</span>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="group py-8 border-b border-[#1A2E22]/10 cursor-pointer opacity-50 hover:opacity-100 transition-opacity">
+                    <h3 class="serif-font text-3xl">Strapatasada</h3>
+                    <p class="text-sm text-[#1A2E22]/60 mt-2">Greek-style scrambled eggs with heirloom tomatoes and grass-fed feta.</p>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="group py-8 border-b border-[#1A2E22]/10 cursor-pointer opacity-50 hover:opacity-100 transition-opacity">
+                    <h3 class="serif-font text-3xl">Miso Chicken</h3>
+                    <p class="text-sm text-[#1A2E22]/60 mt-2">Pasture-raised chicken thigh, fermented miso glaze, bok choy.</p>
+                </div>
+            </div>
+
+            <!-- Images (Parallax Wrapper) -->
+            <div class="hidden md:grid grid-cols-2 gap-4">
+                <div class="parallax-wrapper rounded-2xl overflow-hidden h-64">
+                    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/98495472-aacd-4d19-bf19-cd2454d9e387_800w.webp" class="w-full h-[120%] object-cover parallax-img" alt="Food">
+                </div>
+                <div class="parallax-wrapper rounded-2xl overflow-hidden h-64 mt-12">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-[120%] object-cover parallax-img" alt="Food">
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="mt-12 flex flex-wrap gap-3">
+             <span class="px-4 py-2 rounded-full border border-[#1A2E22]/20 text-xs font-medium hover:bg-[#1A2E22] hover:text-white transition-colors cursor-pointer flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-bold" class="text-green-600"></iconify-icon> Gluten-Free
+            </span>
+            <span class="px-4 py-2 rounded-full border border-[#1A2E22]/20 text-xs font-medium hover:bg-[#1A2E22] hover:text-white transition-colors cursor-pointer flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-bold" class="text-green-600"></iconify-icon> No Seed Oils
+            </span>
+             <span class="px-4 py-2 rounded-full border border-[#1A2E22]/20 text-xs font-medium hover:bg-[#1A2E22] hover:text-white transition-colors cursor-pointer flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-bold" class="text-green-600"></iconify-icon> Glyphosate-Free Oats
+            </span>
+             <span class="px-4 py-2 rounded-full border border-[#1A2E22]/20 text-xs font-medium hover:bg-[#1A2E22] hover:text-white transition-colors cursor-pointer flex items-center gap-2">
+                <iconify-icon icon="solar:check-circle-bold" class="text-green-600"></iconify-icon> Low-FODMAP
+            </span>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="text-[#F3F1EB] bg-[#1A2E22] pt-24 pb-24">
+        <div class="max-w-7xl mx-auto px-4 md:grid md:grid-cols-2 gap-16 items-center">
+            
+            <div class="mb-12 md:mb-0">
+                <h2 class="reveal-text serif-font text-4xl md:text-5xl mb-6 text-white">No lock-ins. Just pure nutrition.</h2>
+                <p class="text-white/60 text-lg mb-8 max-w-md">Pause, skip, or cancel your subscription anytime. We earn your loyalty with every meal, not a contract.</p>
+                
+                <div class="grid grid-cols-3 gap-4 mt-12">
+                     <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bcf37426-79fe-435e-94d6-d4197e5a5994_800w.webp" class="h-24 w-full object-cover rounded-lg opacity-60 hover:opacity-100 transition-opacity" alt="Lifestyle">
+                     <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6a2605e1-058f-467a-bca2-16aacdb706a0_800w.webp" class="h-24 w-full object-cover rounded-lg opacity-60 hover:opacity-100 transition-opacity" alt="Lifestyle">
+                     <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5fe49f96-1c36-4800-8d69-bcddec308154_800w.webp" class="h-24 w-full object-cover rounded-lg opacity-60 hover:opacity-100 transition-opacity" alt="Lifestyle">
+                </div>
+            </div>
+
+            <div class="relative">
+                <div class="absolute -top-10 -right-10 text-[10rem] font-serif text-white/5 select-none pointer-events-none">01</div>
+                
+                <!-- Pricing Card -->
+                <div class="bg-[#F3F1EB] text-[#1A2E22] rounded-3xl p-8 max-w-sm mx-auto shadow-2xl relative z-10 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-10 h-10 rounded-full bg-[#1A2E22] text-white flex items-center justify-center">
+                            <iconify-icon icon="solar:link-circle-bold-duotone"></iconify-icon>
+                        </div>
+                        <div class="px-3 py-1 bg-stone-200 rounded-full text-[10px] font-bold uppercase tracking-wide">Best Value</div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mb-2">Protocol Membership</h3>
+                    <p class="text-xs text-[#1A2E22]/60 mb-6">Full access to personalized nutrition planning and meal delivery.</p>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-3 text-sm">
+                            <iconify-icon icon="solar:check-read-linear" class="mt-0.5 text-green-700"></iconify-icon>
+                            <span class="">Including 50+ curated recipes</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-sm">
+                            <iconify-icon icon="solar:check-read-linear" class="mt-0.5 text-green-700"></iconify-icon>
+                            <span class="">Quarterly gut-microbiome testing</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-sm">
+                            <iconify-icon icon="solar:check-read-linear" class="mt-0.5 text-green-700"></iconify-icon>
+                            <span>1-on-1 Nutritionist Consults</span>
+                        </li>
+                    </ul>
+
+                    <div class="flex items-end gap-2 mb-6">
+                        <span class="text-4xl font-serif">£12</span>
+                        <span class="text-sm text-[#1A2E22]/60 mb-1">/ week</span>
+                    </div>
+
+                    <button class="w-full bg-[#1A2E22] text-white py-3 rounded-full text-sm font-medium hover:bg-opacity-90 transition-all">Start Membership</button>
+
+                    <!-- Custom Toggle -->
+                    <div class="mt-6 flex justify-center">
+                        <div class="bg-stone-200 p-1 rounded-full flex relative w-max">
+                            <button class="px-4 py-1 rounded-full text-xs font-medium bg-white shadow-sm z-10 transition-all">Weekly</button>
+                            <button class="px-4 py-1 rounded-full text-xs font-medium text-[#1A2E22]/50 hover:text-[#1A2E22] z-10 transition-all">Monthly</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Snippets under pricing -->
+                <div class="mt-8 flex justify-between gap-4 text-xs text-white/40 max-w-sm mx-auto">
+                    <div class="flex gap-2 gap-x-2 gap-y-2 items-center">Sonya M. saved 3.2 hrs</div>
+                     <div class="flex gap-x-2 gap-y-2 items-center">James T. improved recovery</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="bg-[#F3F1EB] pt-24 pb-24">
+        <div class="text-center mb-16 px-4">
+            <span class="border border-[#1A2E22]/20 px-3 py-1 rounded-full text-[10px] uppercase tracking-wide">Outcomes</span>
+            <h2 class="reveal-text serif-font text-3xl md:text-4xl mt-6 mb-4">Engineered for measurable biological impact.</h2>
+            <p class="text-[#1A2E22]/60 text-sm">Join thousands who have reclaimed their metabolic potential with Vitalis.</p>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-6">
+            
+            <!-- Card 1 -->
+            <div class="bg-white p-6 rounded-2xl border border-[#1A2E22]/5">
+                <div class="flex gap-1 text-[#1A2E22] mb-4 text-xs">
+                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                    <iconify-icon icon="solar:star-bold"></iconify-icon>
+                </div>
+                <h4 class="font-serif text-lg mb-2">A systemic reset</h4>
+                <p class="text-sm text-[#1A2E22]/70 leading-relaxed mb-6">
+                    "Within two weeks, the brain fog lifted completely. My HRV has increased by 15ms and my sleep scores are consistently in the 90s. It feels like my body is finally working with me."
+                </p>
+                <div class="flex items-center justify-between mt-auto pt-6 border-t border-[#1A2E22]/5">
+                    <div class="flex items-center gap-2">
+                         <span class="font-bold text-xl">4.9</span>
+                         <span class="text-[10px] text-[#1A2E22]/50">Rating on Trustpilot</span>
+                    </div>
+                    <iconify-icon icon="simple-icons:trustpilot" width="24" class="text-[#1A2E22]"></iconify-icon>
+                </div>
+            </div>
+
+            <!-- Card 2 (Video style) -->
+            <div class="bg-[#1A2E22] rounded-2xl overflow-hidden relative group h-[400px] md:h-auto text-white">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5c483e84-eb3c-4503-8e7b-48588f5ecbdf_800w.webp" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="Reviewer">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                
+                <div class="absolute bottom-6 left-6 right-6">
+                    <div class="w-10 h-10 bg-white/20 backdrop-blur rounded-full flex items-center justify-center mb-4 cursor-pointer hover:bg-white hover:text-[#1A2E22] transition-colors">
+                        <iconify-icon icon="solar:play-bold" class="ml-1"></iconify-icon>
+                    </div>
+                    <p class="font-serif text-xl leading-snug mb-2">"The inflammation in my joints has completely subsided."</p>
+                    <p class="text-xs text-white/70">Marcus T., Founding Member</p>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white p-6 rounded-2xl border border-[#1A2E22]/5 flex flex-col">
+                <div class="mb-4">
+                    <h4 class="font-serif text-lg mb-2">Precision nutrition</h4>
+                    <p class="text-sm text-[#1A2E22]/70">"Zero preparation, zero compromise. The nutrient density is palatable—I feel satiated for hours without the post-meal crash. It's transformed my workday efficiency."</p>
+                </div>
+                
+                <div class="mt-auto">
+                    <div class="flex gap-2 mb-4 overflow-hidden">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b95db7a4-3b0e-4661-be97-9cbf9efa1aa3_320w.webp" class="w-16 h-16 rounded-lg object-cover" alt="Food">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/661b4347-5f6e-418c-9a62-f67f01a392c7_320w.webp" class="w-16 h-16 rounded-lg object-cover" alt="Food">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/870c42e5-6164-4e3e-95f0-1232a5f83b2f_320w.webp" class="w-16 h-16 rounded-lg object-cover" alt="Food">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <img src="https://i.pravatar.cc/100?img=9" class="w-8 h-8 rounded-full" alt="Nicole">
+                        <div class="text-xs">
+                            <div class="font-bold">Dr. Alisha V.</div>
+                            <div class="text-[#1A2E22]/50">Functional MD</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="overflow-hidden bg-[#1A2E22] text-[#F3F1EB] pt-32 pb-0 relative">
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="grid md:grid-cols-4 gap-12 mb-24">
+                <div class="md:col-span-1">
+                    <p class="text-xs font-bold uppercase tracking-widest mb-6 text-[#F3F1EB]/40">System</p>
+                    <p class="text-3xl font-serif mb-6 leading-tight tracking-tight">Precision nutrition for the modern mind.</p>
+                    <div class="flex gap-4">
+                        <button class="text-xs font-medium bg-[#F3F1EB] text-[#1A2E22] px-5 py-2.5 rounded-full hover:bg-white transition-colors">Get Started</button>
+                    </div>
+                </div>
+                
+                <div class="md:col-span-1">
+                    <p class="text-xs font-bold uppercase tracking-widest mb-6 text-[#F3F1EB]/40">Connect</p>
+                    <a href="mailto:hello@vitalis.com" class="block text-lg font-serif mb-2 hover:opacity-70 transition-opacity tracking-tight">hello@vitalis.com</a>
+                    <p class="text-sm text-[#F3F1EB]/60 mb-6">+44 (0) 20 7123 4567</p>
+                    <p class="text-[10px] text-[#F3F1EB]/40 leading-relaxed">180 Strand, TempleLondon WC2R 1EAUnited Kingdom</p>
+                </div>
+
+                <div class="md:col-span-2 flex flex-col md:flex-row justify-end gap-12 md:gap-24 text-sm font-medium">
+                    <div class="flex flex-col gap-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-[#F3F1EB]/40 mb-2">Explore</span>
+                        <a href="#" class="hover:text-[#F3F1EB]/70 transition-colors">Methodology</a>
+                        <a href="#" class="hover:text-[#F3F1EB]/70 transition-colors">Sourcing</a>
+                        <a href="#" class="hover:text-[#F3F1EB]/70 transition-colors">Journal</a>
+                        <a href="#" class="hover:text-[#F3F1EB]/70 transition-colors">Careers</a>
+                    </div>
+                     <div class="flex flex-col gap-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-[#F3F1EB]/40 mb-2">Social</span>
+                        <a href="#" class="hover:text-[#F3F1EB]/70 transition-colors">Instagram</a>
+                        <a href="#" class="hover:text-[#F3F1EB]/70 transition-colors">Twitter</a>
+                        <a href="#" class="hover:text-[#F3F1EB]/70 transition-colors">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Big Text -->
+        <div class="w-full text-center leading-none overflow-hidden border-t border-[#F3F1EB]/5">
+            <h1 class="text-[26vw] leading-[0.75] font-serif text-[#F3F1EB]/5 tracking-tighter select-none pointer-events-none -mb-[0.05em] pt-4 parallax-footer-text">
+                Vitalis
+            </h1>
+        </div>
+    </footer>
+
+    <!-- GSAP Animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // 1. Text Splitter Utility
+            // Splits text into words wrapped in a span with overflow hidden
+            const splitTextElements = document.querySelectorAll(".reveal-text");
+            
+            splitTextElements.forEach(element => {
+                const text = element.innerText;
+                const words = text.split(" ");
+                let newHtml = "";
+                
+                words.forEach(word => {
+                    newHtml += `<span class="word-wrapper"><span class="word">${word}</span></span> `;
+                });
+                
+                element.innerHTML = newHtml;
+            });
+
+            // 2. Reveal Animation
+            // Animates the inner .word spans up from 110% to 0%
+            const revealElements = document.querySelectorAll(".reveal-text");
+            
+            revealElements.forEach(element => {
+                const words = element.querySelectorAll(".word");
+                
+                gsap.to(words, {
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    },
+                    y: 0,
+                    duration: 1.2,
+                    ease: "power4.out",
+                    stagger: 0.04
+                });
+            });
+
+            // 3. Parallax Image Effect
+            // Selects images inside .parallax-wrapper and moves them vertically
+            const parallaxWrappers = document.querySelectorAll(".parallax-wrapper");
+            
+            parallaxWrappers.forEach(wrapper => {
+                const img = wrapper.querySelector(".parallax-img");
+                if (img) {
+                    gsap.fromTo(img, 
+                        { y: "-10%" },
+                        {
+                            y: "10%",
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: wrapper,
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: true
+                            }
+                        }
+                    );
+                }
+            });
+
+            // 4. Fade Up Miscellaneous Elements
+            gsap.utils.toArray(".fade-up-element").forEach(element => {
+                gsap.to(element, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%"
+                    }
+                });
+            });
+
+            // 5. Button Reveal
+            gsap.to("#hero-cta", {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 1, // Wait for text
+                ease: "power3.out"
+            });
+        });
+    </script>
+</body></html>
